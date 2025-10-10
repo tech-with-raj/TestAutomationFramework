@@ -11,6 +11,8 @@ import static org.hamcrest.Matchers.*;
 import java.io.IOException;
 
 import static com.api.utils.ConfigManager.*;
+
+import static com.api.utils.SpecUtil.*;
 import com.pojo.UserCredentials;
 
 import io.restassured.http.ContentType;
@@ -26,22 +28,11 @@ public class LoginAPITest {
 		UserCredentials usercredBody = new UserCredentials("iamfd", "password");
 		
 		given()
-		 .baseUri(getProperty("BASE_URI"))
-		 .and()
-		 .contentType(ContentType.JSON)
-		 .and()
-		 .body(usercredBody)
-		 .log().uri()
-		 .log().method()
-		 .log().headers()
-		 .log().body()
+		 .spec(requestSpec(usercredBody))
 		.when()
 		 .post("login")
 		.then()
-		 .log().all()
-		 .statusCode(200)
-		 .time(lessThan(12000L))
-		 .and()
+		 .spec(responseSpec_OK())
 		 .body("message", equalTo("Success"))
 		 .and()
 		 .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("response-schema/loginResponseSchema.json"));
