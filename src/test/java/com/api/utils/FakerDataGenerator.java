@@ -26,7 +26,8 @@ public class FakerDataGenerator {
 	private final static int MST_OEM_ID = 1;
 	private final static int PRODUCT_ID = 1;
 	private final static int MST_MODEL_ID = 1;
-	private final static int[] VALID_PROBLEM_ID = {1,2,3,4,5,6,7,8,9,10,11,12,15,16,17,19,20,22,24,26,27,28,29};
+	private final static int[] VALID_PROBLEM_ID = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16, 17, 19, 20, 22, 24,
+			26, 27, 28, 29 };
 
 	public FakerDataGenerator() {
 
@@ -44,30 +45,37 @@ public class FakerDataGenerator {
 	}
 
 	public static Iterator<CreateJobPayload> generateFakeCreateJobData(int count) {
-        List<CreateJobPayload> payloadLists = new ArrayList<>();
-		
-        for(int i =1; i<=count; i++) {
-        	
-		Customer customer = generateFakeCustomerData();
-		CustomerAddress customerAddress = generateFakeCustomerAddressData();
-		CustomerProduct customerProduct = generateFakeCustomerProductData();
-		List<Problems> problemList = generateFakeProblemsData();
-		CreateJobPayload payload = new CreateJobPayload(MST_SERVICE_LOCATION_ID, MST_PLATFORM_ID,
-				MST_WARRENTY_STATUS_ID, MST_OEM_ID, customer, customerAddress, customerProduct, problemList);
-		payloadLists.add(payload);
-		
-        }
-        
+		List<CreateJobPayload> payloadLists = new ArrayList<>();
+
+		for (int i = 1; i <= count; i++) {
+
+			Customer customer = generateFakeCustomerData();
+			CustomerAddress customerAddress = generateFakeCustomerAddressData();
+			CustomerProduct customerProduct = generateFakeCustomerProductData();
+			List<Problems> problemList = generateFakeProblemsData();
+			CreateJobPayload payload = new CreateJobPayload(MST_SERVICE_LOCATION_ID, MST_PLATFORM_ID,
+					MST_WARRENTY_STATUS_ID, MST_OEM_ID, customer, customerAddress, customerProduct, problemList);
+			payloadLists.add(payload);
+
+		}
+
 		return payloadLists.iterator();
 	}
-	
-	private static List<Problems> generateFakeProblemsData() {
-		String fakeRemark = faker.lorem().sentence(5);
-		int validIndex = RANDOM.nextInt(VALID_PROBLEM_ID.length);
-		Problems problems = new Problems(VALID_PROBLEM_ID[validIndex], fakeRemark);
-		List<Problems> problemList = new ArrayList<Problems>();
-		problemList.add(problems);
 
+	private static List<Problems> generateFakeProblemsData() {
+
+		int count = RANDOM.nextInt(3) + 1;
+		String fakeRemark;
+		int validIndex;
+		Problems problems;
+		List<Problems> problemList = new ArrayList<Problems>();
+
+		for (int i = 1; i <= count; i++) {
+			fakeRemark = faker.lorem().sentence(5);
+			validIndex = RANDOM.nextInt(VALID_PROBLEM_ID.length);
+			problems = new Problems(VALID_PROBLEM_ID[validIndex], fakeRemark);
+			problemList.add(problems);
+		}
 		return problemList;
 	}
 
@@ -77,8 +85,8 @@ public class FakerDataGenerator {
 				.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
 		String imeiSerialNo = faker.numerify("##############");
 		String popUrl = faker.internet().url();
-		CustomerProduct customerProduct = new CustomerProduct(dop, imeiSerialNo, imeiSerialNo, imeiSerialNo, popUrl, PRODUCT_ID,
-				MST_MODEL_ID);
+		CustomerProduct customerProduct = new CustomerProduct(dop, imeiSerialNo, imeiSerialNo, imeiSerialNo, popUrl,
+				PRODUCT_ID, MST_MODEL_ID);
 		return customerProduct;
 	}
 
