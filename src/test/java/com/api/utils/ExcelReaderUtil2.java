@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.sql.RowSetMetaData;
 
@@ -14,6 +15,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.api.request.model.UserCredentials;
+import com.dataProviders.api.bean.UserBean;
+import com.poiji.bind.Poiji;
 
 public class ExcelReaderUtil2 {
 
@@ -21,7 +24,7 @@ public class ExcelReaderUtil2 {
 
 	}
 
-	public static Iterator<UserCredentials> loadTestData() {
+	public static <T> Iterator<T> loadTestData(String sheetName, Class<T> clazz) {
 
 		InputStream iStream = Thread.currentThread().getContextClassLoader()
 				.getResourceAsStream("testData/PhoenixTestData.xlsx");
@@ -34,51 +37,14 @@ public class ExcelReaderUtil2 {
 			e.printStackTrace();
 		}
 
-		XSSFSheet sheet = workbook.getSheet("LoginTestData");
+		XSSFSheet sheet = workbook.getSheet(sheetName);
 
-		XSSFRow myRow;
+		  List<T> dataList = Poiji.fromExcel(sheet, clazz);
+		  
+		  return dataList.iterator();
 
-		XSSFCell myCell;
-
-		XSSFRow hearderRows = sheet.getRow(0);
-
-		int usernameIndex = -1;
-		int passwordIndex = -1;
-
-		for (Cell cell : hearderRows) {
-
-			if (cell.getStringCellValue().trim().equalsIgnoreCase("username")) {
-
-				usernameIndex = cell.getColumnIndex();
-
-			}
-			if (cell.getStringCellValue().trim().equalsIgnoreCase("password")) {
-
-				passwordIndex = cell.getColumnIndex();
-
-			}
-
-		}
-
-		int lastRowIndex = sheet.getLastRowNum();
-
-		XSSFRow rowData;
-		UserCredentials userCredentials = null;
-
-		ArrayList<UserCredentials> userList = new ArrayList<UserCredentials>();
-
-		for (int rowIndex = 1; rowIndex <= lastRowIndex; rowIndex++) {
-
-			rowData = sheet.getRow(rowIndex);
-
-			userCredentials = new UserCredentials(rowData.getCell(usernameIndex).toString(),
-					rowData.getCell(passwordIndex).toString());
-
-			userList.add(userCredentials);
-
-		}
-
-		return userList.iterator();
+			
+		
 
 	}
 
