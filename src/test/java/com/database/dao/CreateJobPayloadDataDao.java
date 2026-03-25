@@ -122,11 +122,6 @@ public class CreateJobPayloadDataDao {
 			e.printStackTrace();
 		}
 
-		for (CreateJobBean createJobBean : beanList) {
-
-			System.out.println(createJobBean);
-		}
-
 		return beanList;
 
 	}
