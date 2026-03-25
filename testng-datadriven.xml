@@ -10,6 +10,7 @@
        <class name="com.api.tests.dataDriven.CreateJobAPIJsonDataDrivenTest"/>
        <class name="com.api.tests.dataDriven.LoginAPIExcelDataDrivenTest"/>
        <class name="com.api.tests.dataDriven.CreateJobAPIExcelDataDrivenTest"/>
+       <class name="com.api.tests.dataDriven.CreateJobAPIDbDataDrivenTest"/>
        
     </classes>
   </test>

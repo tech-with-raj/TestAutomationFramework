@@ -2,6 +2,7 @@ package com.dataProviders;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.testng.annotations.DataProvider;
 
@@ -14,6 +15,7 @@ import com.api.utils.FakerDataGenerator;
 import com.api.utils.JsonReaderUtil;
 import com.dataProviders.api.bean.CreateJobBean;
 import com.dataProviders.api.bean.UserBean;
+import com.database.dao.CreateJobPayloadDataDao;
 
 public class DataProviderUtils {
 
@@ -74,14 +76,11 @@ public class DataProviderUtils {
 
 		return ExcelReaderUtil.loadTestData("LoginTestData", UserBean.class);
 	}
-	
-	
 
 	@DataProvider(name = "createJobAPIExcelDataProvider", parallel = true)
 	public static Iterator<CreateJobPayload> createJobExcelDataProvider() {
 
 		Iterator<CreateJobBean> iterator = ExcelReaderUtil.loadTestData("CreateJobTestData", CreateJobBean.class);
-
 
 		ArrayList<CreateJobPayload> payloadsList = new ArrayList<CreateJobPayload>();
 
@@ -99,5 +98,22 @@ public class DataProviderUtils {
 
 	}
 
+	@DataProvider(name = "createJobAPIDbDataProvider", parallel = true)
+	public static Iterator<CreateJobPayload> createJobAPIDbDataProvider() {
+
+		List<CreateJobBean> beanlist = CreateJobPayloadDataDao.getCreateJobPayloadData();
+
+		List<CreateJobPayload> payloadList = new ArrayList<CreateJobPayload>();
+
+		for (CreateJobBean createJobBean : beanlist) {
+
+			CreateJobPayload payload = CreateJobBeanMapper.mapper(createJobBean);
+
+			payloadList.add(payload);
+
+		}
+
+		return payloadList.iterator();
+	}
 
 }
